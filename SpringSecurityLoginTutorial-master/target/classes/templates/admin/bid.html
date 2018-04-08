@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Admin Page</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+
+		<form th:action="@{/admin/home}" method="get">
+			<button class="btn btn-md btn-info btn-block" name="registration"
+				type="Submit">Go Back</button>
+		</form>
+		<br>
+		<form th:action="@{/logout}" method="get">
+			<button class="btn btn-md btn-danger btn-block" name="registration"
+				type="Submit">Logout</button>
+		</form>
+
+
+		<div class="panel-group" style="margin-top: 40px">
+			<form th:action="@{/bid/userbid}" method="post">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<span th:text="${userName}"></span>
+					</div>
+
+					<div class="panel-body">
+
+						<div class='panel-content'>
+							<div class="form-group row">
+								<label for="staticEmail" class="col-sm-2 col-form-label">Select
+									Match</label>
+								<div class="col-sm-10">
+									<select name="week_scroll" class="form-control" id="selected"
+										name="matchid">
+										<option>Select</option>
+										<option th:each="match:${matches}" th:value="${match.id}"
+											th:text="${match.matchdesc}" th:attr="price=${match.price}" />
+									</select>
+								</div>
+								<br>
+
+								<script>
+									
+								</script>
+							</div>
+							<div class="form-group row">
+								<label for="staticEmail" class="col-sm-2 col-form-label">Select
+									Team</label>
+								<div class="col-sm-10">
+									<select name="week_scroll" class="form-control" id="teamselect"
+										name="teamSelection">
+										<option>Select</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="staticEmail" class="col-sm-2 col-form-label">Input
+									Price</label>
+								<div class="col-sm-10">
+									<input type="text" id="optionMatchPrice" class="form-control"
+										name="price" readonly="readonly">
+								</div>
+								<input type="hidden" th:value="${user.id}" name="id" />
+							</div>
+
+							<p th:text="${successMessage}"></p>
+							<div class="form-actions">
+								<button type="submit" class="btn">Confirm</button>
+							</div>
+						</div>
+						<div>
+							<br>
+						</div>
+
+					</div>
+
+				</div>
+			</form>
+			<div class="panel-content">
+				<a th:href="@{/admin/seeOtherBid}">
+					<button class="btn btn-md btn-danger btn-block">See
+						Other's Bid</button>
+				</a>
+			</div>
+		</div>
+
+	</div>
+</body>
+
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$('#selected')
+								.on(
+										'change',
+										function() {
+
+											//getList<IPLTeams> for That match and iterate and show
+											$('#teamselect').children(
+													'option:not(:first)')
+													.remove();
+											var options = $(
+													"#selected option:selected")
+													.html().split("vs");
+											$
+													.each(
+															options,
+															function(key, value) {
+																$('#teamselect')
+																		.append(
+																				$(
+																						"<option></option>")
+																						.attr(
+																								"value",
+																								key)
+																						.text(
+																								value));
+															});
+
+											// 									alert($(this).attr('price'))
+											var price = this.options[this.selectedIndex]
+													.getAttribute('price');
+											document
+													.getElementById("optionMatchPrice").value = price
+
+										})
+					})
+</script>
+</html>
